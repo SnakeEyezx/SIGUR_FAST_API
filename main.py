@@ -32,7 +32,6 @@ def log2db(x):
     try:
         insert_query_string = f"INSERT INTO SIGUR_LOGS(LOG_ID, EVENT_TIME, ACCESS_POINT, DIRECTION, KEY_HEX) VALUES (?, ?, ?, ?, ?);"
         cursor.execute(insert_query_string, x["logId"], x["time"], x["accessPoint"], x["direction"], x["keyHex"])
-        print(x["logId"], x["time"], x["accessPoint"], x["direction"], x["keyHex"])
     except pyodbc.Error as error:
         connection.rollback()
         print("Failed to insert record into Oracle database {}".format(error))
@@ -47,10 +46,8 @@ async def get_body(request: Request):
 
 @app.post("/event")
 async def get_boy(request: Request):
+    async def get_boy(request: Request):
     req = await request.json()
-    response_array = []
-    for i in req["logs"]:
-        log2db(i)
-        d = {"confirmedLogId": i["logId"]}
-        response_array.append(d)
-    return response_array
+    log2db(req["logs"][0])
+    resp = {"confirmedLogId": req["logs"][0]["logId"]}
+    return resp
