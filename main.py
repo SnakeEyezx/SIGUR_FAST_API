@@ -45,7 +45,7 @@ async def get_body(request: Request):
 
 
 @app.post("/event")
-async def get_boy(request: Request):
+async def get_body(request: Request):
     req = await request.json()
     log2db(req["logs"][0])
     resp = {"confirmedLogId": req["logs"][0]["logId"]}
